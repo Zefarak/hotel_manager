@@ -1,0 +1,23 @@
+{% load zefarak_tags %}
+<div class="col-6">
+    <div class="form-group">
+        <h6>ΔΩΜΑΤΙΑ</h6>
+        {% for room in rooms %}
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="{{ room.id }}"
+                            name="room_name"
+                            {% if room.id|stringformat:"s" in request.GET|get_item:"room_name" %} checked {% endif %}
+                    >
+                    {{ room }}
+                    <span class="form-check-sign">
+                        <span class="check"></span>
+                    </span>
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+</div>

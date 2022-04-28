@@ -1,0 +1,104 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-12 center">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>{{ reservation }}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΠΛΗΡΟΦΟΡΙΕΣ ΠΕΛΑΤΗ</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>ΟΝΟΜΑΤΕΠΩΝΥΜΟ</th>
+                                    <td>{{ reservation.customer }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΕΧΕΙ ΞΑΝΑΡΘΕΙ</th>
+                                    <td>{{ reservation.customer.repeater }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΣΥΝΟΛΟ</th>
+                                    <td>{{ reservation.final_value }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΠΡΟΚΑΤΑΒΟΛΗ</th>
+                                    <td>{{ reservation.payment_value }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΥΠΟΛΟΙΠΟ</th>
+                                    <td>{{ reservation.difference }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h5>ΠΛΗΡΩΜΗ ΚΑΙ ΚΛΕΙΣΙΜΟ ΔΩΜΑΤΊΟΥ</h5>
+                        <form method="post" class="form">
+                            {% csrf_token %}
+                            {{ payment_form }}
+                            <button type="submit" class="btn btn-primary"><i class="fa fa-edit"></i>  ΕΠΕΞΕΡΓΑΣΙΑ ΚΑΙ ΚΛΕΙΣΙΜΟ</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΚΡΑΤΗΣΗ</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <td>{{ reservation.date_range }} | {{ reservation.days }} ΗΜΕΡΕΣ</td>
+                                </tr>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <td>{{ reservation.room }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΚΟΣΤΟΣ</th>
+                                    <td>{{ reservation.value }}</td>
+                                </tr>
+                                <tr>
+                                    <th>EXTRA ΒΕD</th>
+                                    <td>{{ reservation.extra_cost_per_person }}</td>
+                                </tr>
+                                <tr>
+                                    <th>EXTRA </th>
+                                    <td>{{ reservation.charges_value }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΣΥΝΟΛΙΚΗ ΑΞΙΑ</th>
+                                    <td>{{ reservation.final_value }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                       {% comment %} <a href="{% url 'reservations:action_reservation_pay' reservation.id 'payment' %}" class="btn btn-success">ΠΛΗΡΩΜΗ ΚΑΙ ΚΛΕΙΣΙΜΟ ΔΩΜΑΤΙΟΥ</a>{% endcomment %}
+                        <a href="{% url 'reservations:action_reservation_pay' reservation.id 'cancel' %}" class="btn btn-danger pull-right">ΑΚΥΡΩΣΗ ΔΙΑΜΟΝΗΣ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

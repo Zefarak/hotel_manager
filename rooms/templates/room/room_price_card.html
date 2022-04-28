@@ -1,0 +1,70 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="{{ back_url }}" class="btn btn-warning pull-right">ΕΠΙΣΤΡΟΦΗ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>{{ price }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for room in price.room.all%}
+                                    <tr>
+                                        <td>{{ room }}</td>
+                                        <td><a class="btn btn-danger" href="{% url 'rooms:action_room_price_card_add_remove' price.id room.id 'add' %}"><i class="fa fa-trash"></i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΠΡΟΣΘΗΚΗ ΔΩΜΑΤΙΩΝ</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for room in rooms %}
+                                    <tr>
+                                        <td>{{ room }}</td>
+                                        <td><a class="btn btn-success" href="{% url 'rooms:action_room_price_card_add_remove' price.id room.id 'add' %}"><i class="fa fa-plus"></i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

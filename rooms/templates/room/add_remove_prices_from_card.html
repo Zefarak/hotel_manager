@@ -1,0 +1,74 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+     <div class="content">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>{{ page_title }}</h4>
+                        <p>ΕΠΙΛΕΓΜΕΝΑ ΔΩΜΑΤΙΑ</p>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΤΙΜΗ</th>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th>ΕΠΙΠΛΕΟΝ ΤΙΜΗ/ΑΝΑ ΑΤΟΜΟ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for price in room.extra_prices.all %}
+                                    <tr>
+                                        <td>{{ price.title }} {{ price.id }}</td>
+                                        <td>{{ price.date_range }}</td>
+                                        <td>{{ price.price }}</td>
+                                        <td>{{ price.extra_value_per_person }}</td>
+                                        <td><a href="{% url 'rooms:room_price_add_remove' room.id price.id 'remove' %}" class="btn btn-danger"><i class="fa fa-trash"></i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="{{ back_url }}" class="btn btn-primary pull-right">ΕΠΙΣΤΡΟΦΗ</a>
+                        <h4>ΠΡΟΣΘΗΚΗ</h4>
+                        <p>-</p>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΤΙΜΗ</th>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th>ΕΠΙΠΛΕΟΝ ΤΙΜΗ/ΑΝΑ ΑΤΟΜΟ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for price in prices %}
+                                    <tr>
+                                        <td>{{ price.title }}</td>
+                                        <td>{{ price.date_range }}</td>
+                                        <td>{{ price.price }}</td>
+                                        <td>{{ price.extra_value_per_person }}</td>
+                                        <td><a href="{% url 'rooms:room_price_add_remove' room.id price.id 'add' %}" class="btn btn-success"><i class="fa fa-plus"></i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

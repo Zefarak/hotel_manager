@@ -1,0 +1,51 @@
+{% load zefarak_tags %}
+<div class="col-6">
+    <div class="form-group">
+        <h6>ΚΑΤΑΣΤΑΣΗ</h6>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="active"
+                        name="status_name"
+                        {% if 'active' in request.GET|get_item:"status_name" %} checked {% endif %}
+                >
+                ΕΝΕΡΓΗ
+                <span class="form-check-sign">
+                    <span class="check"></span>
+                </span>
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="done"
+                        name="status_name"
+                        {% if 'done' in request.GET|get_item:"paid_name" %} checked {% endif %}
+                >
+                ΟΛΟΚΛΗΡΩΜΕΝΗ
+                <span class="form-check-sign">
+                    <span class="check"></span>
+                </span>
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input
+                        class="form-check-input"
+                        type="checkbox"
+                        value="cancel"
+                        name="status_name"
+                        {% if 'cancel' in request.GET|get_item:"paid_name" %} checked {% endif %}
+                >
+                ΑΚΥΡΩΜΕΝΗ
+                <span class="form-check-sign">
+                    <span class="check"></span>
+                </span>
+            </label>
+        </div>
+    </div>
+</div>

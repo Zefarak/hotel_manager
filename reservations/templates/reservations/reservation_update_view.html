@@ -1,0 +1,241 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>{{ object }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <h5>ΑΝΑΛΥΣΗ ΧΡΕΩΣΕΩΝ</h5>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΧΡΕΩΣΗ</th>
+                                    <th>ΠΟΣΟ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>ΒΑΣΙΚΗ ΧΡΕΩΣΗ</td>
+                                    <td>{{ object.value }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ΧΡΕΩΣΗ ΕΠΙΠΛΕΟΝ ΑΤΟΜΩΝ</td>
+                                    <td>{{ object.extra_cost_per_person }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ΕΧΤΡΑ ΧΡΕΩΣΕΙΣ</td>
+                                    <td>{{ object.charges_value }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ΠΡΟΚΑΤΑΒΟΛΗ</td>
+                                    <td>{{ object.payment_value }}</td>
+                                </tr>
+                                <tr>
+                                    <td>ΣΥΝΟΛΟ</td>
+                                    <td>{{ object.final_value }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h4>ΕΠΕΞΕΡΓΑΣΙΑ</h4>
+                        <form method="post" class="form">
+                            {% csrf_token %}
+                            {{ form }}
+                            <button type="submit" class="btn btn-info"><i class="fa fa-save"></i> </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        ΑΛΛΑΓΗ ΔΩΜΑΤΙΟΥ
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <th>ΒΑΣΙΚΗ ΤΙΜΟΛΟΓΙΣΗ</th>
+                                    <TH>-</TH>
+                                    <TH>-</TH>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for room in rooms %}
+                                    <tr>
+                                        <td>{{ room }}</td>
+                                        <td>{{ room.value }} | {{ room.extra_value_per_person }}</td>
+                                        <td><a href="{% url 'reservations:change_room_prices' object.id room.id 'reservation_price' %}" class="btn btn-warning">Check | Use current prices</a></td>
+                                        <td><a href="{% url 'reservations:change_room_prices' object.id room.id 'room_price' %}" class="btn btn-danger">Check | Use room Prices </a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Extra Χρεώσεις</h4>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chargeModal">
+                          ΠΡΟΣΘΗΚΗ ΧΡΕΩΣΗΣ
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="chargeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">ΠΡΟΣΘΗΚΗ ΧΡΕΩΣΗΣ</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <h4>ΔΗΜΙΟΥΡΓΙΑ ΧΡΕΩΣΗΣ</h4>
+                                <form method="post" class="form" action="{% url 'reservations:action_charge_from_reservation' object.id %}">
+                                    {% csrf_token %}
+                                    {{ extra_form }}
+                                    <button type="submit" class="btn btn-primary"><i class="fa fa-save"></i> ΑΠΟΘΗΚΕΥΣΗ </button>
+                                </form>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΧΡΕΩΣΗ</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th>ΧΡΗΣΕΙΣ</th>
+                                    <th>ΣΥΝΟΛΙΚΗ ΑΞΙΑ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for extra in object.extra_charges.all %}
+                                    <tr>
+                                        <td>{{ extra }}</td>
+                                        <td>{{ extra.value }}</td>
+                                        <td>{{ extra.charges }}</td>
+                                        <td>{{ extra.final_value }}</td>
+                                        <td><a href="{% url 'reservations:remove_extra_prices' object.id extra.id %}" class="btn btn-danger"><i class="fa fa-trash"></i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="{% url 'reservations:recalculate_prices' object.id %}" class="btn btn-info ">ΥΠΟΓΙΣΜΟΣ ΤΙΜΩΝ</a>
+                        <a href="{% url 'reservations:homepage' %}" class="btn btn-warning pull-right">ΕΠΙΣΤΡΟΦΗ</a>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="2">{{ reservation }}</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>CheckIn</th>
+                                    <td>{% if object.checkIn %}<i class="fa fa-check"></i> {% else %} - {% endif %}</td>
+                                </tr>
+                                <tr>
+                                    <th>CheckIn</th>
+                                    <td>{{ object.check_in|date:'d-M-Y' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>CheckOut</th>
+                                    <td>{{ object.check_out|date:'d-M-Y' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Ημερες</th>
+                                    <td>{{ object.days }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <br> <hr>
+                        <br>
+                        <a href="{{ delete_url }}" class="btn btn-danger">ΔΙΑΓΡΑΦΗ</a>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΠΛΗΡΩΜΕΣ</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΤΡΑΠΕΖΑ</th>
+                                    <th>ΠΟΣΟ</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ele in object.reservation_payments.all %}
+                                    <tr>
+                                        <td><a href="{% url 'reservations:update-payment' ele.id %}"> {{ ele.date }} </a> </td>
+                                        <td>{{ ele.payment_type }}</td>
+                                        <td>{{ ele.value }}</td>
+                                        <td>
+                                            <a href="{% url 'reservations:update-delete-payment-reservation' ele.id 'delete' %}" class="btn btn-danger"><i class="fa fa-trash"></i> </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <br>
+                        <hr>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                          ΝΕΑ ΠΛΗΡΩΜΗ
+                        </button>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                  <form class="form" method="post" action="{% url 'reservations:update-delete-payment-reservation' object.id 'create' %}">
+                                      {% csrf_token %}
+                                      {{ payment_form }}
+                                      <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> </button>
+                                  </form>
+                              </div>
+
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

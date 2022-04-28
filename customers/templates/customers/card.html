@@ -1,0 +1,102 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>{{ object.title }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                          <li class="list-group-item">ΤΗΛΕΦΩΝΑ: {{ object.phone }} </li>
+                          <li class="list-group-item">ΕΘΝΙΚΟΤΗΤΑ:  {{ object.country }}</li>
+                          <li class="list-group-item">EMAIL:  {{ object.email }}</li>
+                          <li class="list-group-item">EΧEΙ ΞΑΝΑΡΘΕΙ:  {% if object.repeater %} <span><i class="fas fa-thumbs-up"></i></span> {% else %} -  {% endif %}</li>
+                          <li class="list-group-item">ΥΠΟΛΟΙΠΟ: {{ object.balance }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div><div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="{% url 'customers:list' %}" class="btn btn-warning pull-right">ΕΠΙΣΤΡΟΦΗ</a>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" class="form">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label>Check In</label>
+                                    <input type="date" class="form-control" name="check_in">
+                                </div>
+                                <div class="col-6">
+                                    <label>Check Out</label>
+                                    <input type="date" class="form-control" name="check_out">
+                                </div>
+                                <div class="col-12">
+
+                                    <a href="{{ request.path }}" class="btn btn-danger">ΚΑΘΑΡΙΣΜΟΣ</a>
+                                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-save "></i> </button>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    <hr />
+                        <h4>ΚΡΑΤΗΣΕΙΣ</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>CHECK IN - CHECK OUT</th>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <th>STATUS</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in reservations %}
+                                    <tr>
+                                        <td>{{ reservation.date_range }}</td>
+                                        <td>{{ reservation.room }}</td>
+                                        <td>{{ reservation.isDone }}</td>
+                                        <td>{{ reservation.final_value }}</td>
+                                        <td><a href="{{ reservation.get_edit_url }}" target="_blank" class="btn btn-info"><i class="fa fa-edit"></i> </a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    <hr />
+                    <h4>ΠΛΗΡΩΜΕΣ</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΤΡΟΠΟΣ ΠΛΗΡΩΜΗΣ</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                    <tr>
+                                        <td>{{ payment.date }}</td>
+                                        <td>{{ payment.get_payment_type_display }}</td>
+                                        <td>{{ payment.value }}</td>
+                                        <td><a href="{{ payment.get_edit_url }}" class="btn btn-warning"><i class="fa fa-edit"></i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,267 @@
+<!DOCTYPE html> {% load static %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ instance.costumer }} | {{ instance.get_series_display }} | {{ instance.number }}</title>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+        <style>
+            .my_p{
+                padding-right: 3rem !important;
+                padding-left: 3rem !important;
+            }
+            .bottom {
+                position: absolute;
+                bottom: 10px;
+            }
+            table {
+                border: 2px ;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container" style="height: 29.7cm;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class="row pb-5 p-5">
+                            <div class="col-md-6">
+                                <p class="font-weight-bold mb-4">{{ card_info.eponimia }}</p>
+                                <p class="mb-1">{{ card_info.job }}</p>
+                                <p class="mb-1">{{ card_info.city }}</p>
+                                <p class="mb-1">ΑΦΜ: {{ card_info.afm }} ΔΟΥ: {{ card_info.doy }}</p>
+                                <p class="mb-1">ΤΗΛΕΦΩΝΑ: {{ card_info.phone }}</p>
+                                <br>
+                            </div>
+                            <div class="col-6"></div>
+                                <div class="col-12">
+                                     <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>ΕΙΔΟΣ ΠΑΡΑΣΤΑΤΙΚΟΥ</th>
+                                            <th>ΑΡΙΘΜΟΣ</th>
+                                            <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                            <th>ΩΡΑ</th>
+                                            <th>ΣΕΙΡΑ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{ instance.get_order_type_display }}</td>
+                                            <td>{{ instance.number }}</td>
+                                            <td>{{ instance.date|date:"d/m/Y"}}</td>
+                                            <td>{{ instance.date|date:"H:m"}}</td>
+                                            <td>{{ instance.get_series_display }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="font-weight-bold mb-4">Πληροφοριες Πελατη</p>
+                                    <table class="table table-bordered table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <th>Επωνυμία</th>
+                                                <td>{{ costumer.eponimia }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Επάγγελμα</th>
+                                                <td>{{ costumer.job_description }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Διεύθυνση</th>
+                                                <td>{{ costumer.address }}</td>
+                                            </tr>
+                                             <tr>
+                                                <th>Πολη - ΤΚ</th>
+                                                <td>{{ costumer.city }} {{ card_info.zipcode }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Α.Φ.Μ. - Δ.Ο.Υ</th>
+                                                <td>{{ costumer.afm }} - {{ costumer.doy }}</td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    {% comment %}
+                                    <p class="mb-1">John Doe, Mrs Emma Downson</p>
+                                    <p>Acme Inc</p>
+                                    <p class="mb-1">Berlin, Germany</p>
+                                    <p class="mb-1">6781 45P</p>
+                                    {% endcomment %}
+                                </div>
+                                <div class="col-md-6 text-right">
+                                     <br>
+                                     <table class="table table-bordered table-sm">
+                                        <tbody>
+                                            <tr>
+                                                <th>Σκοπός  Διακίνησης</th>
+                                                <td>{{ instance.get_purpose_of_moving_display|default_if_none:'-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Τόπος Αποστολής</th>
+                                                <td>{{ costumer.loading_place }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Τόπος Προορισμού</th>
+                                                <td>{{ costumer.destination }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Αριθμός Αυτοκινήτου</th>
+                                                <td>{{ costumer.transport| default_if_none:"-" }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Τρόπος Πληρωμής</th>
+                                                <td>{{ instance.get_payment_info_display }}</td>
+                                            </tr>
+                                        <tr>
+                                                <th>Τηλέφωνο</th>
+                                                <td>{% if costumer.phone %}{{ costumer.phone }} {% else %}  - {% endif %}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <div class="col-md-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="5" class="border-0 text-uppercase small font-weight-bold">ΠΕΡΙΓΡΑΦΗ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΜΜ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΠΟΣΟΤΗΤΑ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΤΙΜΗ <br> ΜΟΝΑΔΑΣ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΚΑΘΑΡΗ <br>ΑΞΙΑ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΕΚΠΤΩΣΗ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΣΥΝΟΛΙΚΗ<br> ΑΞΙΑ</th>
+                                                <th class="border-0 text-uppercase small font-weight-bold">ΦΠΑ %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for ele in instance.order_items.all %}
+                                                <tr>
+                                                    <td colspan="5">{{ ele.title }}</td>
+                                                    <td>{{ ele.get_unit_display }}</td>
+                                                    <td>{{ ele.qty }}</td>
+                                                    <td>{{ ele.tag_value }}</td>
+                                                    <td>{{ ele.tag_clean_value }}</td>
+                                                    <td>{{ ele.tag_discount }} %</td>
+                                                    <td>{{ ele.tag_total_value }}</td>
+                                                    <td>{{ ele.get_taxes_modifier_display }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="row my_p">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row bottom">
+                <div class="col-2">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ΥΠΟΛΟΙΠΑ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>ΠΡΟΗΓ.{{ instance.tag_old_balance }}</td>
+                        </tr>
+                        <tr>
+                            <td>ΝΕΟ {{ instance.tag_new_balance }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-6">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ΚΑΘΑΡΗ ΑΞΙΑ</th>
+                            <th>% ΦΠΑ</th>
+                            <th>ΦΠΑ</th>
+                            <th>ΣΥΝΟΛΙΚΗ ΑΞΙΑ</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for ele in different_taxes %}
+                            <tr>
+                                <td>{{ ele.total_clean }}</td>
+                                <td>{{ ele.taxes_modifier }}</td>
+                                <td>{{ ele.total_taxes }}</td>
+                                <td>{{ ele.total }}</td>
+                            </tr>
+                        {% endfor %}
+                         </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    <table class="table table-bordered">
+                        <tbody>
+                        <tr>
+                            <th>ΚΑΘΑΡΗ ΑΞΙΑ</th>
+                            <td>{{ instance.tag_clean_value }}</td>
+                        </tr>
+                        <tr>
+                            <th>ΑΞΙΑ ΦΠΑ</th>
+                            <td>{{ instance.tag_taxes_value }}</td>
+                        </tr>
+                        <tr>
+                            <th>ΣΥΝΟΛΟ</th>
+                            <td>{{ instance.tag_total_value }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-2">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ΣΥΝ. ΠΟΣΟΤΗΤΑ {{ total_qty }}</th>
+                        </tr>
+                        </thead>
+                    </table>
+                </div>
+                <div class="col-5">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>ΠΑΡΑΤΗΡΗΣΕΙΣ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="height: 100px">{{ instance.notes|safe }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-3">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ΕΚΔΟΣΗ</th>
+                                <th>ΠΑΡΑΔΟΣΗ</th>
+                                <th>ΠΑΡΑΛΑΒΗ</th>
+                            </tr>
+                        </thead>
+                        
+                    </table>
+                </div>
+            </div>
+
+        </div>
+  </body>
+</html>

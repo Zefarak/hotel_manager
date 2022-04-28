@@ -1,0 +1,232 @@
+{% extends 'dashboard.html' %}
+
+
+{% block content %}
+    <div class="content">
+        <div id="modal_area"></div>
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Στοιχεία</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <td>{{ object }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΚΑΤΑΣΤΑΣΗ</th>
+                                    <td>{{ object.active }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΧΡΗΣΙΜΟΠΟΙΕΙΤΑΙ</th>
+                                    <td>{{ object.used }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΤΙΜΗ</th>
+                                    <td>{{ object.value }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <a href="" class="btn btn-success">ΚΡΑΤΗΣΗ</a>
+                        <br />
+                        <hr>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΤΙΤΛΟΣ</th>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΕΙΔΟΣ ΔΙΑΦ. ΤΙΜΗΣ</th>
+                                    <th>ΤΙΜΗ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΕΝΕΡΓΟΣ ΠΕΛΑΤΗΣ</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>ΠΕΛΑΤΗΣ</th>
+                                    <td>{{ active_reservation.customer }}</td>
+                                </tr>
+                                <tr>
+                                    <th>CheckIn - CheckOut</th>
+                                    <td>{{ object.active }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΑΞΙΑ</th>
+                                    <td>{{ object.used }}</td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                        <hr />
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΕΠΟΜΕΝΗ ΚΡΑΤΗΣΗ</h4>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <td>{{ object }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΚΑΤΑΣΤΑΣΗ</th>
+                                    <td>{{ object.active }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΧΡΗΣΙΜΟΠΟΙΕΙΤΑΙ</th>
+                                    <td>{{ object.used }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΕΣΟΔΑ</th>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΕΠΙΠΛΕΟΝ ΤΙΜΕΣ</h4>
+                        <a href="{% url 'rooms:action_room_price' object.id %}" class="btn btn-info">ΕΠΕΞΕΡΓΑΣΙΑ</a>
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΤΙΤΛΟΣ</th>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΕΙΔΟΣ ΔΙΑΦ. ΤΙΜΗΣ</th>
+                                    <th>ΤΙΜΗ</th>
+                                    <th>ΑΞΙΑ ΔΩΜΑΤΙΟΥ</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for price in prices %}
+                                    <tr>
+                                        <td>{{ price.title }}</td>
+                                        <td>{{ price.date_start }} | {{ price.date_end }}</td>
+                                        <td>{{ price.get_value_type_display }}</td>
+                                        <td>{{ price.value }}</td>
+                                        <td>{{ price.price }}</Td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΕΠΙΠΛΕΟΝ ΧΡΕΩΣΕΙΣ</h4>
+                        <a href="{% url 'rooms:action_room_charge' object.id %}" class="btn btn-info">ΕΠΕΞΕΡΓΑΣΙΑ</a>
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΤΙΤΛΟΣ</th>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΕΙΔΟΣ ΔΙΑΦ. ΤΙΜΗΣ</th>
+                                    <th>ΤΙΜΗ</th>
+                                    <th>ΑΞΙΑ ΔΩΜΑΤΙΟΥ</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for price in prices %}
+                                    <tr>
+                                        <td>{{ price.title }}</td>
+                                        <td>{{ price.date_start }} | {{ price.date_end }}</td>
+                                        <td>{{ price.get_value_type_display }}</td>
+                                        <td>{{ price.value }}</td>
+                                        <td>{{ price.price }}</Td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΙΣΤΟΡΙΚΟ</h4>
+                        <a target="_blank" href="{% url 'rooms:action_room_price' object.id %}" class="btn btn-info">ΔΗΜΙΟΥΡΓΙΑ ΚΡΑΤΗΣΗΣ</a>
+                        <br />
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΠΕΛΑΤΗΣ</th>
+                                    <th>ΑΤΟΜΑ</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th>ΚΑΤΑΣΤΑΣΗ</th>
+                                    <th>-</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for res in reservations %}
+                                    <tr>
+                                        <td>{{ res.date_range }}</td>
+                                        <td>{{ res.customer }}</td>
+                                        <td>{{ res.capacity }}</td>
+                                        <td>{{ res.final_value }}</td>
+                                        <td>{{ res.tag_status }}</Td>
+                                        <td><a href="{{ price.get_edit_url }}"   class="btn btn-primary"><i class="fa fa-edit"> </i> </a> </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+
+{% endblock %}

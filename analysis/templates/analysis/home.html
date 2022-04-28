@@ -1,0 +1,126 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Analysis - Filters</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" class="form">
+
+                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> </button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΕΣΟΔΑ ΠΕΡΙΟΔΟΥ ==> {{ total_payments }}</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΤΡΟΠΟΣ ΠΛΗΡΩΜΗΣ</th>
+                                    <th>ΑΡΙΘΜΟΣ ΠΛΗΡΩΜΩΝ</th>
+                                    <th>ΕΣΟΔΑ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ele in payment_analysis %}
+                                    <tr>
+                                        <td>{{ ele.payment_type }}</td>
+                                        <td>{{ ele.count }}</td>
+                                        <td>{{ ele.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <a href="{% url 'homepage' %}" class="btn btn-warning">ΕΠΙΣΤΡΟΦΗ</a>
+                    </div>
+                    <div class="card-body">
+                        <h4>ΠΟΣΟΣΤΑ ΚΡΑΤΗΣΕΩΝ</h4>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>ΣΥΝΟΛΙΚΕΣ ΚΡΑΤΗΣΕΙΣ</th>
+                                    <td>{{ reservations_percent.total_count }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΟΛΟΚΛΗΡΩΜΕΝΕΣ</th>
+                                    <td>{{ reservations_percent.isDone }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΑΚΥΡΩΜΕΝΕΣ</th>
+                                    <td>{{ reservations_percent.isCancel }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΣΥΝΟΛΑ</h4>
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>ΣΥΝΟΛΑ ΚΡΑΤΗΣΕΩΝ</th>
+                                    <td>{{ reservations_percent.total }}</td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΠΗΓΕΣ</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΠΗΓΗ</th>
+                                    <th>ΑΡΙΘΜΟΣ ΚΡΑΤΗΣΕΩΝ</th>
+                                    <th>ΑΞΙΑ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ele in source_analysis %}
+                                    <tr>
+                                        <td>{{ ele.source }}</td>
+                                        <td>{{ ele.count }}</td>
+                                        <td>{{ ele.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% load static %}
+
+<div class="sidebar" data-color="white" data-active-color="danger">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+      <div class="logo">
+        <a href="/" class="simple-text logo-mini">
+          <div class="logo-image-small">
+            <img src="{% static 'Gregorys-House-.png' %}">
+          </div>
+        </a>
+        <a href="" class="simple-text logo-normal">
+         -
+          <!-- <div class="logo-image-big">
+            <img src="../assets/img/logo-big.png">
+          </div> -->
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="{% url 'customers:list' %}">
+              <i class="nc-icon nc-user-run"></i>
+              <p>ΠΕΛΑΤΕΣ</p>
+            </a>
+              <a href="{% url 'rooms:list' %}">
+                  <i class="nc-icon nc-user-run"></i>
+                  <p>ΔΩΜΑΤΙΑ</p>
+              </a>
+              <a href="{% url 'rooms:room_price_list' %}">
+                  <i class="nc-icon nc-user-run"></i>
+                  <p>ΤΙΜΕΣ ΔΩΜΑΤΙΩΝ</p>
+              </a>
+
+              <a href="{% url 'rooms:room_charge_list' %}">
+              <i class="nc-icon nc-user-run"></i>
+              <p>EXTRA ΧΡΕΩΣΕΙΣ</p>
+            </a>
+          </li>
+            <hr>
+            <li>
+                <a href="{% url 'reservations:homepage' %}">
+                    <i class="nc-icon nc-bell-55"></i>
+                    <p>ΚΡΑΤΗΣΕΙΣ</p>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'reservations:reservation_list' %}">
+                    <i class="nc-icon nc-bell-55"></i>
+                    <p>ΛΙΣΤΑ ΚΡΑΤΗΣΕΩΝ</p>
+                </a>
+            </li>
+
+
+            <hr />
+            <li>
+            <a href="{% url 'vendors:home' %}">
+              <i class="nc-icon nc-bell-55"></i>
+              <p>ΠΡΟΜΗΘΕΥΤΕΣ</p>
+            </a>
+          </li>
+            <li>
+            <a href="{% url 'payroll_bills:home' %}">
+              <i class="nc-icon nc-bell-55"></i>
+              <p>ΕΞΟΔΑ</p>
+            </a>
+          </li>
+            <HR />
+            <li>
+            <a href="{% url 'analysis:homepage' %}">
+              <i class="nc-icon nc-bell-55"></i>
+              <p>ΑΝΑΛΥΣΗ</p>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>

@@ -1,0 +1,332 @@
+{% extends 'dashboard.html' %} {% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-calendar/latest/tui-calendar.css" />
+
+    <!-- If you use the default popups, use this. -->
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+    <link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui.time-picker/latest/tui-time-picker.css" />
+    <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css">
+
+    {% comment %}<link href='{% static 'calendar/lib/main.css' %}' rel='stylesheet' /> {% endcomment %}
+
+   <link href='{% static 'calendar/extra/timeline.css' %}' rel='stylesheet' />
+
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                    <!-- Large modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">ΔΩΜΑΤΙΑ</button>
+
+                        <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">ΠΕΡΙΟΔΟΣ</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                      <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table table-bordered">
+                                   <thead>
+                                   <tr>
+                                       <th>ΔΩΜΑΤΙΟ</th>
+                                       <th>ΑΞΙΑ ΑΝΑ ΜΕΡΑ</th>
+                                       <th>ΕΠΙΠΛΕΟΝ ΑΤΟΜΟ</th>
+                                       <th>ΕΠΙΠΛΕΟΝ ΧΡΕΩΣΕΙΣ</th>
+                                       <th>ΜΕΓΙΣΤΗ ΧΩΡΙΤΙΚΟΤΗΤΑ</th>
+                                       <th> - </th>
+                                   </tr>
+                                   </thead>
+                                   <tbody>
+                                   {% for room in all_rooms %}
+                                       <tr>
+                                           <td {% if not room.is_available %} class="table-danger" {% endif %}>{{ room.room.title }}</td>
+                                           <td>{{ room.price.0 }}</td>
+                                           <td>{{ room.price.1 }}</td>
+                                           <td>{{ room.price.2 }} </td>
+                                           <td>{{ room.0.capacity }}</td>
+                                           <td><a href="{% url 'reservations:action-create-reservation' room.room.id %}" class="btn btn-success"><i class="fa fa-plus"></i> </a> </td>
+                                       </tr>
+                                   {% endfor %}
+
+                                                    </tbody>
+
+                                                </table>
+                                </div>
+
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΑΝΑΖΗΤΗΣΗ ΔΩΜΑΤΙΟΥ</h4>
+                    </div>
+                    <div class="card-body">
+                        <form method="get" class="form">
+                            <div class="row">
+                                {% include 'filters/my_filters.html' %}
+                                <div class="col-6">
+                                    <div class="form-group">
+                                        <h6>ΧΩΡΙΤΗΚΟΤΗΤΑ</h6>
+
+                                        <div class="form-check">
+                                            <input class="form-control" type="number" name="people" value="{{ request.GET.people }}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input name="search_exist" value="yes" hidden>
+                            <a href='{{ request.path }}' class='btn btn-warning  '>ΚΑΘΑΡΙΣΜΟΣ ΦΙΛΤΡΩΝ</a>
+                            <button class="btn btn-success pull-right"><i class="fa fa-eye"></i> ΑΠΟΘΗΚΕΥΣΗ</button> 
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="accordion" id="accordionExample">
+
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                              <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                  ΚΡΑΤΗΣΕΙΣ
+                                </button>
+                              </h2>
+                            </div>
+                            <div id="result_container"></div>
+                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
+                              <div class="card-body">
+                                <a style="display: inline" href="{% url 'reservations:create_reservation' %}" class="btn btn-success">ΚΡΑΤΗΣΗ</a>
+                                <br />
+                                <hr />
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>ΗΜΕΡΟΜΗΝΙΑ|ΗΜΕΡΕΣ</th>
+                                        <th>ΔΩΜΑΤΙΟ</th>
+                                        <th>ΠΕΛΑΤΗΣ</th>
+                                        <th>ΑΤΟΜΑ</th>
+                                        <th>ΚΟΣΤΟΣ/ΠΛΗΡΩΜΕΣ</th>
+                                        <th>ΠΗΓΗ</th>
+                                        <th>CHECK IN</th>
+                                        <th>ΑΚΥΡΩΣΗ</th>
+                                        <th>ΟΛΟΚΛΗΡΩΣΗ ΔΙΑΜΟΝΗΣ</th>
+                                        <th>ΕΠΕΞΕΡΓΑΣΙΑ</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for res in reservations %}
+                                        <tr>
+                                            <td>{{ res.check_in|date:"d M, Y" }} - {{ res.check_out|date:"d M, Y" }}| {{ res.days }}</td>
+                                            <td>{{ res.room }}</td>
+                                            <td>{{ res.customer }}</td>
+                                            <td>{{ res.capacity }} </td>
+                                            <td><span {% if res.check_payments %} style="color:blue"  {% else %} {% endif %}> {{ res.final_value }}| {{ res.payment_value}}</span></td>
+                                            <td>{{ res.get_source_display }}</td>
+                                            <td>
+                                                {% if res.checkIn %}
+                                                    Checked In
+                                                {% else %}
+                                                <a href="{% url 'reservations:reservation_actions' res.id 'isCheck' %}" class="btn btn-success"><i class="fa fa-check"></i> </a>
+                                                {% endif %}
+                                             </td>
+                                            <td>{% if res.active_status %}<a href="{% url 'reservations:reservation_actions' res.id 'isCancel' %}" class="btn btn-danger"><i class="fa fa-minus"></i> </a> {% else %}<p>-</p>{% endif %}</td>
+                                            <td>{% if res.active_status %}
+                                                <a href="{% url 'reservations:close_and_pay_reservation' res.id  %}" class="btn btn-info"><i class="fa fa-plus"></i> ΟΛΟΚΛΗΡΩΣΗ </a>
+
+
+                                            {% else %} <p>ΟΛΟΚΛΗΡΩΜΕΝΗ</p> {% endif %}
+
+                                            </td>
+                                            <td><a href="{{ res.get_edit_url }}" class="btn btn-primary"><i class="fa fa-edit"></i> </a></td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                              </div>
+                            </div>
+                    </div>
+                    <div class="card">
+                            <div class="card-header" id="headingTwo">
+                              <h2 class="mb-0">
+                                <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  ΗΜΕΡΟΛΟΓΙΟ
+                                </button>
+                              </h2>
+                            </div>
+                            <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                                <div class="card-header">
+                                    {% for room in rooms %}
+                                        <!-- Button trigger modal -->
+                                        <a href="{% url 'reservations:ajax_room_price_modal' room.id %}" class="btn btn-primary show_price">
+                                            {{ room }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                              <div class="card-body">
+                                  <div id="calendar_2"></div>
+                                  <div id="modal_area"></div>
+                              </div>
+                            </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+
+{% block extra_js %}
+
+
+    <script type="text/javascript">
+        $('.show_price').on('click',function (evt) {
+            evt.preventDefault();
+            $('#modal_area').empty();
+            const my_btn = $(this);
+            const url = my_btn.attr('href');
+            console.log('click', url);
+            $.ajax({
+                method: 'GET',
+                dataType: 'json',
+                url: url,
+
+                success: function (data) {
+                    $('#modal_area').html(data.result);
+                    $('#roomModal').modal('show');
+                }
+            })
+        })
+    </script>
+
+
+
+    {% comment %}<script src='{% static 'calendar/lib/main.js' %}'></script> {% endcomment %}
+    <script src="{% static 'calendar/extra/main.js' %}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarE1 = document.getElementById('calendar');
+            const today  = new Date();
+            const calendar = new FullCalendar.Calendar(calendarE1, {
+                initialDate:today,
+
+                editable: true,
+                selectable: true,
+                businessHours: true,
+                dayMaxEvents: true,
+                events:[
+                    {% for res in qs_data %}
+                        {% if forloop.last %}
+                            {
+                                title: '{{ res }} | {{ res.final_value }}',
+                                start: '{{ res.check_in|date:'c' }}',
+                                end: '{{ res.check_out|date:'c' }}',
+                                backgroundColor: '{{ res.color_for_calendar }}',
+                                url: '{{ res.get_payment_status_url }}'
+                            }
+                        {% else %}
+                        {
+                            title: '{{ res }} | {{ res.final_value }}',
+                            start: '{{ res.check_in|date:'c' }}',
+                            end: '{{ res.check_out|date:'c' }}',
+                            backgroundColor: '{{ res.color_for_calendar }}',
+                            url: '{{ res.get_payment_status_url }}'
+
+                        },
+                        {% endif %}
+                    {% endfor %}
+                ]
+            });
+            calendar.render();
+        })
+    </script>
+
+
+    <script>
+
+         document.addEventListener('DOMContentLoaded', function() {
+             let calendarEl = document.getElementById('calendar_2');
+             function resourceRenderCallback(resourceObj, labelTds, bodyTds){
+                 labelTds.on('click', function(){console.log('click');});
+}
+
+             let calendar = new FullCalendar.Calendar(calendarEl, {
+                 timeZone: 'UTC',
+                 headerToolbar: {
+                     left: 'today prev,next',
+                     center: 'title',
+                     right: 'resourceTimelineDay,resourceTimelineTenDay,resourceTimelineMonth,resourceTimelineYear'
+                 },
+                 initialView: 'resourceTimelineMonth',
+                 scrollTime: '08:00',
+                 aspectRatio: 1.5,
+                 resourceAreaWidth: '5%',
+                 views: {
+
+                     resourceTimelineTenDay: {
+                         type: 'resourceTimeline',
+                         duration: { days: 10 },
+                         buttonText: '10 days'
+                     }
+                     },
+                 editable: true,
+                 resourceAreaHeaderContent: 'Rooms',
+                 resources: [
+                     {% for room in rooms_availability %}
+                         {
+                             "id":"{{ room.id }}",
+                             "title":"{{ room }}",
+                             "url":'www.facebook.com'
+                         }{% if forloop.last %} {% else %}, {% endif %}
+                     {% endfor %}
+                 ],
+                 resourceRender: function(resourceObj, labelTds, bodyTds) {
+                     labelTds.on('click', function(){console.log('click');});
+                 },
+
+
+                events:[
+                        {% for res in qs_data %}
+                            {
+                                "id":"{{ res.id }}",
+                                "resourceId":"{{ res.room.id }}",
+                                "title":"{{ res.customer }}",
+                                "start":"{{ res.check_in|date:'c' }}",
+                                "end":"{{ res.check_out|date:'c' }}",
+                                "backgroundColor": '{{ res.color_for_calendar }}',
+                                'url': '{{ res.get_payment_status_url }}'
+                            }
+                            {% if forloop.last %}{% else %},{% endif %}
+                        {% endfor %}
+                    ]
+            });
+
+        calendar.render();
+  });
+
+</script>
+
+
+{% endblock %}

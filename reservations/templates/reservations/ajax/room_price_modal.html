@@ -1,0 +1,79 @@
+
+
+<!-- Modal -->
+<div class="modal fade" id="roomModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">{{ room }} | Μέγιστα άτομα: {{ room.capacity }}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h6 style="color:blue">ΒΑΣΙΚΗ ΧΡΕΩΣΗ</h6>
+          <table class="table table-bordered">
+              <tbody>
+                <tr>
+                    <th>ΧΡΕΩΣΗ ΑΝΑ ΜΕΡΑ</th>
+                    <td>{{ room.value }}</td>
+                </tr>
+              <tr>
+                    <th>ΕΠΙΠΛΕΟΝ ΑΤΟΜΟ</th>
+                    <td>{{ room.extra_value_per_person }}</td>
+                </tr>
+              </tbody>
+          </table>
+          <br>
+          <h6 style="color: teal">ΧΡΕΩΣΕΙΣ ΠΕΡΙΟΔΟΥ</h6>
+          <table class="table table-bordered">
+              <thead>
+                <tr>
+                    <th>ΠΕΡΙΟΔΟΣ</th>
+                    <th>ΧΡΕΩΣΗ</th>
+                    <th>ΧΡΕΩΣΗ/ΑΤΟΜΟ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for charge in room.extra_prices.all %}
+                    <tr>
+                        <td>{{ charge.date_start|date:'d-M-Y' }} | {{ charge.date_end|date:'d-M-Y' }}</td>
+                        <td>{{ charge.value }}</td>
+                        <td>{{ charge.extra_value_per_person }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+         <br>
+          <h6 style="color: teal">EXTRA</h6>
+          <table class="table table-bordered">
+              <thead>
+                <tr>
+                    <th>ΤΙΤΛΟΣ</th>
+                    <th>ΧΡΕΩΣΗ ΑΝΑ ΗΜΕΡ.</th>
+                    <th>ΧΡΕΩΣΗ ΑΝΑ ΑΤΟΜΟ</th>
+                    <th>ΑΞΙΑ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for charge in room.my_extras.all %}
+                    <tr>
+                        <td>{{ charge }}</td>
+                        <td> {% if charge.day_charge %} <i style="color:green" class="fa fa-thumbs-up"></i>
+                        {% else %} <i style="color:red" class="fa fa-thumbs-down"></i> {% endif %}</td>
+                        <td>{% if charge.capacity %} <i style="color:green" class="fa fa-thumbs-up"></i> {% else %}
+                            <i style="color:red" class="fa fa-thumbs-down"></i> {% endif %}</td>
+                        <td>{{ charge.value }} {{ currency }}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>

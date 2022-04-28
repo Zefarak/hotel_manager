@@ -1,0 +1,132 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΑΝΑΛΥΣΗ ΚΡΑΤΗΣΕΩΝ</h4>
+                        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            Filters
+                        </a>
+                        <a href="{{ request.path }}" class="btn btn-danger">Καθαρισμος</a>
+                        <a href="{{ back_url }}" class="btn btn-warning pull-right">Επιστροφη</a>
+                    </div>
+                    <div class="card-body">
+                        <div class="collapse" id="collapseExample">
+                            <form method="get" class="form">
+                                 <div class="row">
+                                      {% include 'filters/my_filters.html' %}
+                                 </div>
+                                 <button type="submit" class="btn btn-"><i class="fa fa-save"></i> Αποθηκευση </button>
+                            </form>
+
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΑΝΑ ΠΗΓΗ(ΟΛΟΚΛΗΡΩΜΕΝΕΣ)</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΠΗΓΗ</th>
+                                    <th>ΚΡΑΤΗΣΕΙΣ</th>
+                                    <th>ΜΕΣΟ ΕΣΟΔΟ</th>
+                                    <th>ΕΣΟΔΑ ΑΠΟ ΑΞΙΑ ΔΩΜΑΤΙΩΝ</th>
+                                    <th>ΠΟΣΟ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ele in qs_analysis %}
+                                    <tr>
+                                        <td>{{ ele.source }}</td>
+                                        <td>{{ ele.count_sum }}</td>
+                                        <td>{{ ele.average|floatformat:2 }}</td>
+                                        <td>{{ ele.value }}</td>
+                                        <td>{{ ele.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">ΑΞΙΑ ΑΝΑ ΔΩΜΑΤΙΟ</div>
+                    <div class="card-body">
+                         <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ΔΩΜΑΤΙΟ</th>
+                                    <th>ΚΡΑΤΗΣΕΙΣ</th>
+                                    <th>ΗΜΕΡΕΣ</th>
+                                    <th>ΜΕΣΟ ΕΣΟΔΟ</th>
+                                    <th>ΕΣΟΔΑ ΑΠΟ ΑΞΙΑ ΔΩΜΑΤΙΩΝ</th>
+                                    <th>ΠΟΣΟ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for ele in isDonePerRoom %}
+                                    <tr>
+                                        <td>{{ ele.room__title }}</td>
+                                        <td>{{ ele.count_sum }}</td>
+                                        <td>{{ ele.days }}</td>
+                                        <td>{{ ele.average|floatformat:2 }}</td>
+                                        <td>{{ ele.value }}</td>
+                                        <td>{{ ele.total }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha256-TQq84xX6vkwR0Qs1qH5ADkP+MvH0W+9E7TdHJsoIQiM=" crossorigin="anonymous"></script>
+     <script>
+        const ctx = document.getElementById('lineChart')
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data:{
+                labels: [{% for ele in isDonePerMonth %} {% if forloop.last %} '{{ ele.month }}' {% else %} '{{ ele.month }}', {% endif %}{% endfor %}],
+                datasets: [
+                    {
+                        label: 'ΕΣΟΔΑ',
+                        backgroundColor: 'green',
+                        borderColor: 'green',
+                        fill: false,
+                        data:[{% for ele in isDonePerMonth %} {% if forloop.last %} {{ ele.total }}{% else %} {{ ele.total }}, {% endif %} {% endfor %}]
+                    }
+                ],
+            options: {
+                maintainAspectRatio: false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+            }
+        })
+
+
+     </script>
+
+{% endblock %}

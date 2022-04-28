@@ -1,0 +1,147 @@
+{% extends 'dashboard.html' %} {% load static %}
+
+{% block content %}
+    <div class="content">
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΚΡΑΤΗΣΕΙΣ</h4>
+                    </div>
+                    <div class="card-body">
+                       <table class="table table-hover">
+                           <thead>
+                                <tr>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΠΕΛΑΤΗΣ</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                                {% for rev in reservations %}
+                                    <tr>
+                                        <td>{{ rev.date_range }}</td>
+                                        <td>{{ rev.customer }}</td>
+                                    </tr>
+                                {% endfor %}
+                           </tbody>
+                       </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>EXTRA ΤΙΜΕΣ</h4>
+                    </div>
+                    <div class="card-body">
+                       <table class="table table-hover">
+                           <thead>
+                                <tr>
+                                    <th>ΗΜΕΡΟΜΗΝΙΑ</th>
+                                    <th>ΤΙΤΛΟΣ</th>
+                                    <th>ΑΞΙΑ</th>
+                                    <th>ΕΠΙΠΛΕΟΝ ΚΟΣΤΟΣ ΑΝΑ ΑΤΟΜΟ</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                                {% for price in extra_prices %}
+                                    <tr>
+                                        <td>{{ price.date_range }}</td>
+                                        <td>{{ price.title }}</td>
+                                        <td>{{ price.price }}</td>
+                                        <td> {{ price.extra_value_per_person }}
+                                    </tr>
+                                {% endfor %}
+                           </tbody>
+                       </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>EXTRA ΧΡΕΩΣΕΙΣ</h4>
+                    </div>
+                    <div class="card-body">
+                       <table class="table table-hover">
+                           <thead>
+                                <tr>
+                                    <th>Extra</th>
+                                    <th>ΑΞΙΑ</th>
+                                </tr>
+                           </thead>
+                           <tbody>
+                                {% for price in obj.my_extras.all %}
+                                    <tr>
+                                        <td>{{ price }}</td>
+                                        <td>{{ price.value }}</td>
+                                    </tr>
+                                {% endfor %}
+                           </tbody>
+                       </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΑΝΑΛΥΣΗ ΤΙΜΗΣ</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th>ΤΙΜΗ ΔΩΜΑΤΙΟΥ</th>
+                                    <td>{{ room_price.0 }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΣΥΝΟΛΟ ΧΡΕΩΣΕΩΝ</th>
+                                    <td>{{ obj.calculate_extras }}</td>
+                                </tr>
+                                <tr>
+                                    <th>ΣΥΝΟΛΟ</th>
+                                    <td>{{ final_value }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΔΗΜΙΟΥΡΓΙΑ ΚΡΑΤΗΣΗΣ</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="form" method="post">
+                            {% csrf_token %}
+                            {{ form }}
+                            <button class="btn btn-primary"><i class="fa fa-save"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ΔΗΜΙΟΥΡΓΙΑ ΠΕΛΑΤΗ</h4>
+                        <a href="{% url 'reservations:homepage' %}" class="btn btn-warning pull-right">ΕΠΙΣΤΡΟΦΗ</a>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" class="form" action="{% url 'reservations:validate_customer'  %}">
+                            {%  csrf_token %}
+                            {{ customer_form }}
+
+                            <button class="btn btn-info" type="submit"><i class="fa fa-save"></i> ΑΠΟΘΗΚΕΥΣΗ</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+
+{{ form.media }}
+
+{% endblock %}
