@@ -3,6 +3,7 @@ from urllib.parse import urlencode
 from django.shortcuts import reverse
 
 import datetime
+from datetime import timedelta
 from dateutil.relativedelta import relativedelta
 
 
@@ -17,9 +18,7 @@ def build_url(*args, **kwargs):
 def initial_date(request, months=12):
     #  gets the initial last three months or the session date
     date_now = datetime.datetime.today()
-    current_year = f'01/01/{datetime.date.today().year} - 12/31/{datetime.date.today().year}'
-    date_range = request.GET.get('date_range', current_year)
-    date_start, date_end = None, None
+    date_range = request.GET.get('date_range', False)
 
     if date_range:
         try:
@@ -34,5 +33,8 @@ def initial_date(request, months=12):
             date_start = date_three_months_ago
             date_end = date_now
             date_range = '%s - %s' % (str(date_three_months_ago).split(' ')[0].replace('-','/'),str(date_now).split(' ')[0].replace('-','/'))
-            request.session['date_range'] = '%s - %s'%(str(date_three_months_ago).split(' ')[0].replace('-','/'),str(date_now).split(' ')[0].replace('-','/'))
+            # request.session['date_range'] = '%s - %s'%(str(date_three_months_ago).split(' ')[0].replace('-','/'),str(date_now).split(' ')[0].replace('-','/'))
+    else:
+        date_start = datetime.datetime.now()
+        date_end = datetime.datetime.now() + timedelta(days=30*months)
     return [date_start, date_end, date_range]

@@ -13,7 +13,6 @@ class BaseForm(forms.Form):
             field.widget.attrs['class'] = 'form-control'
 
 
-
 class ReservationForm(BaseForm, forms.ModelForm):
     advance = forms.BooleanField(required=False, label='Δημιουργια Προκαταβολής')
     check_in = forms.DateField(required=True, widget=forms.DateInput(attrs={'type': 'date'}))
@@ -48,7 +47,7 @@ class ReservationCreateForm(ReservationForm):
                   ]
 
 class ReservationUpdateForm(ReservationForm):
-    room = forms.ModelChoiceField(queryset=Room.objects.all(), widget=forms.HiddenInput())
+    # room = forms.ModelChoiceField(queryset=Room.objects.all(), widget=forms.HiddenInput())
     customer = forms.ModelChoiceField(queryset=Customer.objects.all(), required=True, widget=forms.HiddenInput())
 
 

@@ -1,9 +1,10 @@
 {% load zefarak_tags %}
-<div class="col-6">
+<div class="col-12">
     <div class="form-group">
         <h6>ΔΩΜΑΤΙΑ</h6>
+        <div class="row">
         {% for room in rooms %}
-            <div class="form-check">
+            <div class="form-check col-4">
                 <label class="form-check-label">
                     <input
                             class="form-check-input"
@@ -19,5 +20,6 @@
                 </label>
             </div>
         {% endfor %}
+        </div>
     </div>
 </div>

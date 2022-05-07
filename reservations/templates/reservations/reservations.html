@@ -79,6 +79,7 @@
                         <form method="get" class="form">
                             <div class="row">
                                 {% include 'filters/my_filters.html' %}
+                                {% comment %}
                                 <div class="col-6">
                                     <div class="form-group">
                                         <h6>ΧΩΡΙΤΗΚΟΤΗΤΑ</h6>
@@ -88,10 +89,11 @@
                                         </div>
                                     </div>
                                 </div>
+                                {% endcomment %}
                             </div>
                             <input name="search_exist" value="yes" hidden>
-                            <a href='{{ request.path }}' class='btn btn-warning  '>ΚΑΘΑΡΙΣΜΟΣ ΦΙΛΤΡΩΝ</a>
-                            <button class="btn btn-success pull-right"><i class="fa fa-eye"></i> ΑΠΟΘΗΚΕΥΣΗ</button> 
+                            <a href='{{ request.path }}' class='btn btn-warning pull-right'>ΚΑΘΑΡΙΣΜΟΣ ΦΙΛΤΡΩΝ</a>
+                            <button class="btn btn-success pull-left"><i class="fa fa-eye"></i> ΑΠΟΘΗΚΕΥΣΗ</button>
                         </form>
                     </div>
                 </div>

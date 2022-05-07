@@ -1,8 +1,6 @@
 from django.db import models
-from django.db.models import Q
 from datetime import datetime
-
-from itertools import chain
+from datetime import timedelta
 
 from frontend.tools import initial_date
 
@@ -12,19 +10,11 @@ class ReservationManager(models.Manager):
     def active_or_waiting_arrive(self, request):
         qs = self.filter(isDone=False, isCancel=False)
         room_name = request.GET.getlist('room_name', None)
-        date_start, date_end, date_range = initial_date(request, 6)
+        date_start, date_end, date_range = initial_date(request, 1)
         qs = self.filter(room__id__in=room_name) if room_name else qs
-
-        '''
         if date_start and date_end:
-            second_guess_res = qs
-            qs = qs.filter(check_in__lt=date_end)
-            qs = qs.filter(check_out__gt=date_start)
-            second_guess_res = second_guess_res.filter(check_in__gte=date_start)
-            second_guess_res = second_guess_res.filter(check_out__lt=date_end)
-            qs = chain(qs | second_guess_res)
-        '''
-
+            print('date exsts', date_start, date_end)
+            qs = qs.filter(check_in__gte=date_start, check_in__lt=date_end)
         return qs
 
     def rooms_with_people(self):
@@ -47,7 +37,7 @@ class ReservationManager(models.Manager):
         qs = self.all()
         qs = self.filter(room__id__in=room_name) if room_name else qs
         if date_start and date_end:
-            print('here!')
-            qs = qs.filter(check_in__range=[date_start, date_end])
+            qs = qs.filter(check_in__gte=date_start, check_in__lt=date_end)
+
 
         return qs

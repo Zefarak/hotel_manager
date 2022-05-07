@@ -29,22 +29,22 @@ class HomepageView(TemplateView):
     template_name = 'reservations/reservations.html'
 
     def get_context_data(self, **kwargs):
-        context = super(HomepageView, self).get_context_data(**kwargs)
-        context['date_filter'] = True
+        context = super().get_context_data(**kwargs)
+        # filters
+        context['date_filter'], context['room_filter'] = 2*[True]
         rooms = Room.objects.filter(active=True)
-        if self.request.GET.get('search_exist'):
-            rooms = Room.filter_qs(self.request, Room.objects.filter(active=True))
+        context['rooms'] = rooms
+        context['reservations'] = Reservation.my_query.active_or_waiting_arrive(self.request).order_by('check_in',
+                                                                                                   'checkIn')
         check_in, check_out = [self.request.GET.get('check_in'),
                                self.request.GET.get('check_out')
                                ]
-
         all_rooms = [{'room': room} for room in rooms]
-        context['reservations'] = Reservation.my_query.active_or_waiting_arrive(self.request).order_by('check_in', 'checkIn')
         context['all_rooms'] = all_rooms
         if self.request.GET.get('date_range', False):
             context['all_rooms'] = Reservation.check_room_prices(self.request, rooms)
-        context['rooms'] = rooms
-        context['qs_data'] = Reservation.objects.all()
+
+        context['qs_data'] = Reservation.my_query.filters_data(self.request)
 
         # timeline calendar. what to do what to do
         available_rooms = Room.objects.filter(active=True)
@@ -61,6 +61,7 @@ class HomepageView(TemplateView):
             else:
                 rooms_availability.append(room)
         context['rooms_availability'] = rooms_availability
+
         return context
 
 
