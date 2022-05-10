@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*', config('Host_url')] if PRODUCTION else []
 
 
 # Application definition
+CORS_ALLOW_ALL_ORIGINS = True
 
 INSTALLED_APPS = [
     'dal',
@@ -63,12 +64,15 @@ INSTALLED_APPS = [
     'mptt',
     'import_export',
     'tinymce',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -166,3 +170,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 CURRENCY = '€'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissions',
+    )
+}

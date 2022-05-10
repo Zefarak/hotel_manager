@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from frontend.api.views import api_homepage_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
@@ -29,5 +31,9 @@ urlpatterns = [
     path('tinymce/', include('tinymce.urls')),
     path('payrolls-and-bills/', include('payroll.urls')),
     path('generic-expenses/', include('general_expenses.urls')),
+
+    path('api/', api_homepage_view),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/rooms/', include('rooms.api.urls'))
 
 ]
