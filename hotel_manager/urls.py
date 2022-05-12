@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from rest_framework_simplejwt import views as jwt_views
+
 from frontend.api.views import api_homepage_view
 
 urlpatterns = [
@@ -34,6 +36,9 @@ urlpatterns = [
 
     path('api/', api_homepage_view),
     path('api-auth/', include('rest_framework.urls')),
-    path('api/rooms/', include('rooms.api.urls'))
+    path('api/rooms/', include('rooms.api.urls')),
+
+    path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
 
 ]

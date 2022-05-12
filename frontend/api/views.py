@@ -9,5 +9,7 @@ from rest_framework import permissions
 @permission_classes((permissions.AllowAny,))
 def api_homepage_view(request, format=None):
     return Response({
-        'rooms': reverse('api_rooms:home',request=request, format=format)
+        'rooms': reverse('api_rooms:home', request=request, format=format),
+        'login': reverse('token_obtain_pair', request=request, format=format),
+        'refresh': reverse('token_refresh', request=request, format=format)
     })
