@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/', api_homepage_view),
     path('api-auth/', include('rest_framework.urls')),
     path('api/rooms/', include('rooms.api.urls')),
+    path('api/customers', include('customers.api.urls')),
 
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),

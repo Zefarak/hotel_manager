@@ -27,7 +27,7 @@ SECRET_KEY = config('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-REAL_DB = True
+REAL_DB = False
 PRODUCTION = False
 
 
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'tinymce',
     'rest_framework',
     'corsheaders',
+    'django_filters'
 ]
 
 MIDDLEWARE = [

@@ -30,6 +30,8 @@ class HomepageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # set cookie
+        
         # filters
         context['date_filter'], context['room_filter'] = 2*[True]
         rooms = Room.objects.filter(active=True)
