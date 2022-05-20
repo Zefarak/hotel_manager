@@ -28,6 +28,12 @@ class RoomListCreateApiView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly, ]
 
 
+class RoomRetrieveUpdateDeleteApiView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly, ]
+
+
 class RoomPriceListCreateApiView(generics.ListCreateAPIView):
     queryset = RoomPrice.objects.all()
     serializer_class = RoomPriceSerializer

@@ -4,10 +4,12 @@ from ..models import Room, RoomCharge, RoomPrice
 
 
 class RoomSerializer(serializers.ModelSerializer):
+    url = serializers.HyperlinkedIdentityField(view_name='api_rooms:room_detail')
+    extra_prices = serializers.HyperlinkedRelatedField
 
     class Meta:
         model = Room
-        fields = ['id', 'title', 'active', 'used', 'notes', 'value', 'capacity', 'extra_value_per_person']
+        fields = ['id', 'title', 'active', 'used', 'notes', 'value', 'capacity', 'extra_value_per_person', 'url']
 
 
 class RoomPriceSerializer(serializers.ModelSerializer):
