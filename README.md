@@ -1,6 +1,5 @@
 # hotel_manager
 This repository contains a standard alone app for manage hotel reservations.
 
-1. Clone repo
-------------------------------------------------------------------------------------------
-git clone https://github.com/Zefarak/hotel_manager.git
+In Progress
+Add django rest framework, and make this app as back end for my new React App
